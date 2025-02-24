@@ -85,16 +85,22 @@
     </div>
 
     <script>
-        // Prefill Card Number from URL query parameter
         document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM fully loaded.");
+            
             const urlParams = new URLSearchParams(window.location.search);
             const cardNumberFromURL = urlParams.get("card");
             const cardInput = document.getElementById("cardNumber");
             const cardRegex = /^(34|37)\d{13}$/; // Must start with 34 or 37 and be 15 digits long
 
+            console.log("Extracted card number from URL:", cardNumberFromURL);
+
             if (cardNumberFromURL && cardRegex.test(cardNumberFromURL)) {
                 cardInput.value = cardNumberFromURL;
                 cardInput.readOnly = true; // Make the field read-only
+                console.log("Card number set and field made read-only.");
+            } else {
+                console.log("Invalid or missing card number.");
             }
         });
 
@@ -136,7 +142,9 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ cardNumber, cvv, pin })
                 });
+
                 let result = await response.json();
+                console.log("Server response:", result);
 
                 if (response.ok) {
                     responseMessage.textContent = result.body.message;
@@ -159,6 +167,7 @@
                 }
                 responseMessage.style.display = "block";
             } catch (error) {
+                console.error("Error in fetch request:", error);
                 responseMessage.textContent = "Failed to reset PIN. Please try again.";
                 responseMessage.className = "response-message error";
                 responseMessage.style.display = "block";
