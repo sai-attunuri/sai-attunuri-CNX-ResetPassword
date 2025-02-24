@@ -85,17 +85,18 @@
     </div>
 
     <script>
+        // Prefill Card Number from URL query parameter
         document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const cardNumberFromURL = urlParams.get("card");
-    const cardInput = document.getElementById("cardNumber");
-    const cardRegex = /^(34|37)\d{13}$/;
+            const urlParams = new URLSearchParams(window.location.search);
+            const cardNumberFromURL = urlParams.get("card");
+            const cardInput = document.getElementById("cardNumber");
+            const cardRegex = /^(34|37)\d{13}$/; // Must start with 34 or 37 and be 15 digits long
 
-    if (cardNumberFromURL && cardRegex.test(cardNumberFromURL)) {
-        cardInput.value = cardNumberFromURL;
-        cardInput.readOnly = true;
-    }
-});
+            if (cardNumberFromURL && cardRegex.test(cardNumberFromURL)) {
+                cardInput.value = cardNumberFromURL;
+                cardInput.readOnly = true; // Make the field read-only
+            }
+        });
 
         function toggleVisibility(fieldId, show) {
             let input = document.getElementById(fieldId);
