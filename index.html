@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNX Bank - Reset PIN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .response-message {
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">CNX Bank</div>
+        <div class="title">Reset Your PIN</div>
+
+        <div class="input-container">
+            <input type="text" id="cardNumber" placeholder="Enter 15-digit Card Number" maxlength="15">
+        </div>
+        <div class="input-container">
+            <input type="password" id="cvv" placeholder="Enter 3-digit CVV" maxlength="3">
+            <span class="eye-icon" onmousedown="toggleVisibility('cvv', true)" onmouseup="toggleVisibility('cvv', false)" onmouseleave="toggleVisibility('cvv', false)">👁</span>
+        </div>
+        <div class="input-container">
+            <input type="password" id="pin" placeholder="Enter 6-digit PIN" maxlength="6">
+            <span class="eye-icon" onmousedown="toggleVisibility('pin', true)" onmouseup="toggleVisibility('pin', false)" onmouseleave="toggleVisibility('pin', false)">👁</span>
+        </div>
+        <div class="input-container">
+            <input type="password" id="confirmPin" placeholder="Confirm 6-digit PIN" maxlength="6">
+            <span class="eye-icon" onmousedown="toggleVisibility('confirmPin', true)" onmouseup="toggleVisibility('confirmPin', false)" onmouseleave="toggleVisibility('confirmPin', false)">👁</span>
+        </div>
+        
+        <p id="response-message" class="response-message"></p>
+        
+        <button onclick="resetPin()">Reset PIN</button>
+        <button onclick="clearForm()">Clear Form</button>
+    </div>
+
+    <script>
+        function toggleVisibility(fieldId, show) {
+            let input = document.getElementById(fieldId);
+            input.type = show ? "text" : "password";
+        }
+
+        function clearForm() {
+            document.getElementById("cardNumber").value = "";
+            document.getElementById("cvv").value = "";
+            document.getElementById("pin").value = "";
+            document.getElementById("confirmPin").value = "";
+            document.getElementById("response-message").style.display = "none";
+        }
+
+        async function resetPin() {
+            let cardNumber = document.getElementById("cardNumber").value;
+            let cvv = document.getElementById("cvv").value;
+            let pin = document.getElementById("pin").value;
+            let confirmPin = document.getElementById("confirmPin").value;
+            let responseMessage = document.getElementById("response-message");
+
+            if (!/^[0-9]{6}$/.test(pin)) {
+                responseMessage.textContent = "PIN must be exactly 6 digits (numbers only).";
+                responseMessage.className = "response-message error";
+                responseMessage.style.display = "block";
+                return;
+            }
+            if (pin !== confirmPin) {
+                responseMessage.textContent = "PINs do not match.";
+                responseMessage.className = "response-message error";
+                responseMessage.style.display = "block";
+                return;
+            }
+
+            try {
+                let response = await fetch("https://wy3w0t3rzk.execute-api.us-east-1.amazonaws.com/updatecreditcardpin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cardNumber, cvv, pin })
+                });
+                let result = await response.json();
+
+                if (response.ok) {
+                    responseMessage.textContent = result.body.message;
+                    responseMessage.className = "response-message success";
+                } else {
+                    switch (result.statusCode) {
+                        case 404:
+                            responseMessage.textContent = "Credit Card not found.";
+                            break;
+                        case 403:
+                            responseMessage.textContent = "Invalid CVV.";
+                            break;
+                        case 500:
+                            responseMessage.textContent = "Failed to update PIN.";
+                            break;
+                        default:
+                            responseMessage.textContent = "An error occurred.";
+                    }
+                    responseMessage.className = "response-message error";
+                }
+                responseMessage.style.display = "block";
+            } catch (error) {
+                responseMessage.textContent = "Failed to reset PIN. Please try again.";
+                responseMessage.className = "response-message error";
+                responseMessage.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
