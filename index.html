@@ -85,13 +85,24 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParts = window.location.pathname.split("/");
+            const cardNumberFromURL = urlParts[urlParts.length - 1];
+            const cardInput = document.getElementById("cardNumber");
+            const cardRegex = /^(34|37)\d{13}$/;
+
+            if (cardRegex.test(cardNumberFromURL)) {
+                cardInput.value = cardNumberFromURL;
+                cardInput.readOnly = true;
+            }
+        });
+
         function toggleVisibility(fieldId, show) {
             let input = document.getElementById(fieldId);
             input.type = show ? "text" : "password";
         }
 
         function clearForm() {
-            document.getElementById("cardNumber").value = "";
             document.getElementById("cvv").value = "";
             document.getElementById("pin").value = "";
             document.getElementById("confirmPin").value = "";
