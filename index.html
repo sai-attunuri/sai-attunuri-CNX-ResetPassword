@@ -5,31 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Call Me - Genesys Cloud</title>
     
-    <!-- Load Genesys Cloud SDK -->
-    <script>
-        (function() {
-            var script = document.createElement('script');
-            script.src = "https://sdk-cdn.mypurecloud.com/javascript/216.0.0/purecloud-platform-client-v2.min.js";
-            script.onload = function() {
-                console.log("✅ Genesys Cloud SDK Loaded Successfully");
-            };
-            script.onerror = function() {
-                console.error("❌ Failed to load Genesys Cloud SDK. Check the URL or network connection.");
-            };
-            document.head.appendChild(script);
-        })();
-    </script>
+    <!-- Directly load the Genesys Cloud SDK -->
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/216.0.0/purecloud-platform-client-v2.min.js"></script>
 </head>
 <body>
     <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me Y</button>
-    
+    <button id="callMeBtn">Call Me a</button>
+
     <script>
-        setTimeout(() => {
+        // Wait until the SDK is loaded
+        document.addEventListener("DOMContentLoaded", function () {
             if (window.purecloudPlatformClientV2) {
-                console.log("✅ purecloudPlatformClientV2 is available!");
+                console.log("✅ Genesys Cloud SDK Loaded Successfully");
+
                 const client = new window.purecloudPlatformClientV2.ApiClient();
-                
+
                 // Genesys Cloud Details
                 const CLIENT_ID = 'f9bb4c74-5e52-4bbe-b469-015fe0766bce';
                 const REDIRECT_URI = 'https://sai-attunuri.github.io/sai-attunuri-CNX-ResetPassword/';
@@ -64,9 +54,9 @@
                 });
 
             } else {
-                console.error("❌ purecloudPlatformClientV2 is still undefined!");
+                console.error("❌ purecloudPlatformClientV2 is still undefined! SDK failed to load.");
             }
-        }, 2000); // Wait 2 seconds to ensure SDK is loaded
+        });
     </script>
 </body>
 </html>
