@@ -4,51 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Call Me - Genesys Cloud</title>
-    <script src="https://sdk-cdn.mypurecloud.com/javascript-sdk/v55/platformClient.js"></script>
+    
+    <!-- Load Genesys Cloud SDK -->
+    <script>
+        (function() {
+            var script = document.createElement('script');
+            script.src = "https://sdk-cdn.mypurecloud.com/javascript-sdk/v55/platformClient.js";
+            script.onload = function() {
+                console.log("✅ Genesys Cloud SDK Loaded Successfully");
+            };
+            script.onerror = function() {
+                console.error("❌ Failed to load Genesys Cloud SDK");
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
 </head>
 <body>
     <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me1</button>
+    <button id="callMeBtn">Call Me2</button>
     
     <script>
-        // Ensure platformClient is available
-        const platformClient = window.platformClient || {};
-        const client = new platformClient.ApiClient();
+        setTimeout(() => {
+            if (window.platformClient) {
+                console.log("✅ platformClient is available!");
+                const client = new window.platformClient.ApiClient();
+                
+                // Genesys Cloud Details
+                const CLIENT_ID = 'f9bb4c74-5e52-4bbe-b469-015fe0766bce';
+                const REDIRECT_URI = 'https://sai-attunuri.github.io/sai-attunuri-CNX-ResetPassword/';
+                const PHONE_NUMBER = '+13179831002';
+                const GENESYS_REGION = 'mypurecloud.com'; // Change if needed
 
-        // Genesys Cloud Details
-        const CLIENT_ID = 'f9bb4c74-5e52-4bbe-b469-015fe0766bce';
-        const REDIRECT_URI = 'https://sai-attunuri.github.io/sai-attunuri-CNX-ResetPassword/';
-        const PHONE_NUMBER = '+13179831002';
-        const GENESYS_REGION = 'mypurecloud.com'; // Change if needed
+                // Set up Genesys Cloud API client
+                client.setEnvironment(GENESYS_REGION);
+                client.setPersistSettings(true);
 
-        // Set up Genesys Cloud API client
-        client.setEnvironment(GENESYS_REGION);
-        client.setPersistSettings(true);
+                // Authenticate using Implicit Grant
+                function authenticateGenesys() {
+                    return client.loginImplicitGrant(CLIENT_ID, REDIRECT_URI)
+                        .then(() => console.log('✅ Authenticated successfully'))
+                        .catch(err => console.error('❌ Authentication failed:', err));
+                }
 
-        // Authenticate using Implicit Grant
-        function authenticateGenesys() {
-            return client.loginImplicitGrant(CLIENT_ID, REDIRECT_URI)
-                .then(() => console.log('Authenticated successfully'))
-                .catch(err => console.error('Authentication failed:', err));
-        }
+                // Initiate a WebRTC Call
+                function startCall() {
+                    const conversationsApi = new window.platformClient.ConversationsApi();
+                    
+                    const body = { phoneNumber: PHONE_NUMBER };
 
-        // Initiate a WebRTC Call
-        function startCall() {
-            const conversationsApi = new platformClient.ConversationsApi();
-            
-            const body = {
-                phoneNumber: PHONE_NUMBER
-            };
-            
-            conversationsApi.postConversationsCalls(body)
-                .then(response => console.log('Call initiated:', response))
-                .catch(error => console.error('Error initiating call:', error));
-        }
+                    conversationsApi.postConversationsCalls(body)
+                        .then(response => console.log('✅ Call initiated:', response))
+                        .catch(error => console.error('❌ Error initiating call:', error));
+                }
 
-        // Add event listener to the "Call Me" button
-        document.getElementById('callMeBtn').addEventListener('click', () => {
-            authenticateGenesys().then(startCall);
-        });
+                // Add event listener to the "Call Me" button
+                document.getElementById('callMeBtn').addEventListener('click', () => {
+                    authenticateGenesys().then(startCall);
+                });
+
+            } else {
+                console.error("❌ platformClient is still undefined!");
+            }
+        }, 2000); // Wait 2 seconds to ensure SDK is loaded
     </script>
 </body>
 </html>
