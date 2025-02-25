@@ -9,12 +9,12 @@
     <script>
         (function() {
             var script = document.createElement('script');
-            script.src = "https://sdk-cdn.mypurecloud.com/javascript-sdk/v55/platformClient.js";
+            script.src = "https://sdk-cdn.mypurecloud.com/javascript-sdk/v60/platformClient.min.js";
             script.onload = function() {
                 console.log("✅ Genesys Cloud SDK Loaded Successfully");
             };
             script.onerror = function() {
-                console.error("❌ Failed to load Genesys Cloud SDK");
+                console.error("❌ Failed to load Genesys Cloud SDK. Check the URL or network connection.");
             };
             document.head.appendChild(script);
         })();
@@ -22,7 +22,7 @@
 </head>
 <body>
     <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me2</button>
+    <button id="callMeBtn">Call Me X</button>
     
     <script>
         setTimeout(() => {
