@@ -9,7 +9,7 @@
     <script>
         (function() {
             var script = document.createElement('script');
-            script.src = "https://sdk-cdn.mypurecloud.com/javascript-sdk/v60/platformClient.min.js";
+            script.src = "https://sdk-cdn.mypurecloud.com/javascript/216.0.0/purecloud-platform-client-v2.min.js";
             script.onload = function() {
                 console.log("✅ Genesys Cloud SDK Loaded Successfully");
             };
@@ -22,13 +22,13 @@
 </head>
 <body>
     <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me X</button>
+    <button id="callMeBtn">Call Me Y</button>
     
     <script>
         setTimeout(() => {
-            if (window.platformClient) {
-                console.log("✅ platformClient is available!");
-                const client = new window.platformClient.ApiClient();
+            if (window.purecloudPlatformClientV2) {
+                console.log("✅ purecloudPlatformClientV2 is available!");
+                const client = new window.purecloudPlatformClientV2.ApiClient();
                 
                 // Genesys Cloud Details
                 const CLIENT_ID = 'f9bb4c74-5e52-4bbe-b469-015fe0766bce';
@@ -49,7 +49,7 @@
 
                 // Initiate a WebRTC Call
                 function startCall() {
-                    const conversationsApi = new window.platformClient.ConversationsApi();
+                    const conversationsApi = new window.purecloudPlatformClientV2.ConversationsApi();
                     
                     const body = { phoneNumber: PHONE_NUMBER };
 
@@ -64,7 +64,7 @@
                 });
 
             } else {
-                console.error("❌ platformClient is still undefined!");
+                console.error("❌ purecloudPlatformClientV2 is still undefined!");
             }
         }, 2000); // Wait 2 seconds to ensure SDK is loaded
     </script>
