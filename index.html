@@ -12,8 +12,7 @@
     
     <script>
         // Load Genesys Cloud WebRTC SDK
-        const PLATFORM_CLIENT = window.require('platformClient');
-        const client = new PLATFORM_CLIENT.ApiClient();
+        const client = new platformClient.ApiClient();
 
         // Genesys Cloud Details
         const CLIENT_ID = 'f9bb4c74-5e52-4bbe-b469-015fe0766bce';
@@ -34,7 +33,7 @@
 
         // Initiate a WebRTC Call
         function startCall() {
-            const conversationsApi = new PLATFORM_CLIENT.ConversationsApi();
+            const conversationsApi = new platformClient.ConversationsApi();
             
             const body = {
                 phoneNumber: PHONE_NUMBER
