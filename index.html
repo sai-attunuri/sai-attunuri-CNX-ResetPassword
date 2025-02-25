@@ -10,22 +10,20 @@
         (function() {
             var script = document.createElement('script');
             script.src = "https://sdk-cdn.mypurecloud.com/javascript/216.0.0/purecloud-platform-client-v2.min.js";
+            
             script.onload = function() {
                 console.log("✅ Genesys Cloud SDK Loaded Successfully");
+                initGenesys(); // Call function only when SDK is loaded
             };
+            
             script.onerror = function() {
                 console.error("❌ Failed to load Genesys Cloud SDK. Check the URL or network connection.");
             };
+
             document.head.appendChild(script);
         })();
-    </script>
-</head>
-<body>
-    <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me Sai1</button>
-    
-    <script>
-        setTimeout(() => {
+
+        function initGenesys() {
             if (window.purecloudPlatformClientV2) {
                 console.log("✅ purecloudPlatformClientV2 is available!");
                 const client = new window.purecloudPlatformClientV2.ApiClient();
@@ -66,7 +64,11 @@
             } else {
                 console.error("❌ purecloudPlatformClientV2 is still undefined!");
             }
-        }, 2000); // Wait 2 seconds to ensure SDK is loaded
+        }
     </script>
+</head>
+<body>
+    <h2>Call Me</h2>
+    <button id="callMeBtn">Call Me</button>
 </body>
 </html>
