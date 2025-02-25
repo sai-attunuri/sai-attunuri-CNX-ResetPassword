@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Call Me - Genesys Cloud</title>
-    <script src="https://sdk-cdn.mypurecloud.com/javascript-sdk/v55/genesys-cloud-webrtc-sdk.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript-sdk/v55/platformClient.js"></script>
 </head>
 <body>
     <h2>Call Me</h2>
-    <button id="callMeBtn">Call Me</button>
+    <button id="callMeBtn">Call Me1</button>
     
     <script>
-        // Load Genesys Cloud WebRTC SDK
+        // Ensure platformClient is available
+        const platformClient = window.platformClient || {};
         const client = new platformClient.ApiClient();
 
         // Genesys Cloud Details
